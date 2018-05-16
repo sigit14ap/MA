@@ -20,8 +20,19 @@ Route::get('/home', function () {
 });
 
 Auth::routes();
+Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::group(['prefix' => 'home/pusat', 'middleware' => 'IsPusat'], function () {
-    Route::get('/', 'Pusat\PesantrenController@index')->name('pesantren.index');
+Route::group(['prefix' => 'home/pusat', 'middleware' => 'IsPusatLembaga'], function () {
+    Route::get('/', function () {
+        return redirect('home/pusat/pesantren');
+    });
+    Route::resource('pesantren', 'Pusat\PesantrenController',
+                    ['only' => [
+                        'edit', 'index', 'update'
+    ]]);
     Route::get('/data-pesantren', 'Pusat\PesantrenController@data_index')->name('pesantren.data_index');
+});
+
+Route::group(['prefix' => 'home/pusat', 'middleware' => 'IsLembaga'], function () {
+    Route::resource('pesantren', 'Pusat\PesantrenController');
 });

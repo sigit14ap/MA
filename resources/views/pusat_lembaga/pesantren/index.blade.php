@@ -63,25 +63,27 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        {{-- <a href="{{ route('pesantren.create') }}"><button type="button" class="btn btn-lg btn-w-m btn-primary"><i class="fa fa-plus-square"></i>&nbsp;Tambah</button></a><hr> --}}
+                    @if(Auth::user()->role == "lembaga")
+                        <a href="{{ route('pesantren.create') }}"><button type="button" class="btn btn-lg btn-w-m btn-primary"><i class="fa fa-plus-square"></i>&nbsp;Tambah</button></a><hr>
+                    @endif
                     <div class="table-responsive">
                     <table class="table table-striped table-bordered table-hover dataTables-example" >
                     <thead>
                     <tr>
-                        <th><center>No.</center></th>
-                        <th><center>Pndok Pesantren</center></th>
+                        <th style="width: 27px !important;"><center>No.</i></center></th>
+                        <th><center>Pondok Pesantren</center></th>
                         <th><center>Yayasan</center></th>
-                        <th><center><i class="glyphicon glyphicon-cog"></i></center></th>
+                        <th style="width: 27px !important;"><center><i class="glyphicon glyphicon-cog"></i></center></th>
                     </tr>
                     </thead>
                     <tbody>
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th><center>No.</center></th>
-                        <th><center>Pndok Pesantren</center></th>
+                        <th style="width: 27px !important;"><center>No.</i></center></th>
+                        <th><center>Pondok Pesantren</center></th>
                         <th><center>Yayasan</center></th>
-                        <th><center><i class="glyphicon glyphicon-cog"></i></center></th>
+                        <th style="width: 27px !important;"><center><i class="glyphicon glyphicon-cog"></i></center></th>
                     </tr>
                     </tfoot>
                     </table>
@@ -99,10 +101,12 @@
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('pesantren.data_index') }}',
-                columnDefs: [{
-                    targets: [0, 1, 2],
-                    className: 'mdl-data-table__cell--non-numeric'
-                }],
+                columns: [
+                            { "data": "DT_Row_Index" },
+                            { "data": "nama_pondok_pesantren" },
+                            { "data": "nama_yayasan" },
+                            { "data": "options" }
+                        ],
                 pageLength: 25,
                 responsive: true,
                 dom: '<"html5buttons"B>lTfgitp',

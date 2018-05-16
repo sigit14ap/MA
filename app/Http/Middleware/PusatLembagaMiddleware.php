@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class PDMAMiddleware
+class PusatLembagaMiddleware
 {
     /**
      * Handle an incoming request.
@@ -18,10 +18,8 @@ class PDMAMiddleware
     {
         if (!Auth::check()) {
             return redirect('/login');
-        }elseif (Auth::user()->role == 'pusat') {
-            return redirect('/home/pusat');
-        }elseif (Auth::user()->role == 'lembaga') {
-            return redirect('/home/lembaga');
+        }elseif (Auth::user()->role == 'pdma') {
+            return redirect('/home/pdma');
         }
         return $next($request);
     }
