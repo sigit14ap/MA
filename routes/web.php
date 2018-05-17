@@ -12,11 +12,11 @@
 */
 
 Route::get('/', function () {
-    return redirect('home/pusat');
+    return redirect('home/pesantren');
 });
 
 Route::get('/home', function () {
-    return redirect('home/pusat');
+    return redirect('home/pesantren');
 });
 
 Auth::routes();
@@ -27,9 +27,6 @@ Route::group(['middleware' => 'IsLogin'], function () {
 });
 
 Route::group(['prefix' => 'home', 'middleware' => 'IsPusatLembaga'], function () {
-    Route::get('/', function () {
-        return redirect('home/pesantren');
-    });
     Route::resource('pesantren', 'Pusat\PesantrenController',
                     ['only' => [
                         'edit', 'index', 'update'

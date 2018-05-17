@@ -63,7 +63,8 @@ class PesantrenController extends Controller
     {
         $takhasus = ref_takhasus::all();
         $provinsi = ref_provinsi::all();
-        return view('pusat_lembaga.pesantren.create',compact('takhasus','provinsi'));
+        $type_form = 'create';
+        return view('pusat_lembaga.pesantren.create',compact('takhasus','provinsi','type_form'));
     }
     
 
@@ -151,7 +152,17 @@ class PesantrenController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pesantren = m_pesantren::where('id','=',$id)->first();
+        if(is_null($pesantren)){
+            Session::flash('error_msg', 'Data Pesantren Tidak Ditemukan!');
+            return redirect()->to('/home/pesantren');
+        }else{
+            $takhasus = ref_takhasus::all();
+            $provinsi = ref_provinsi::all();
+            $kota = ref_kabupaten::where('provinsi_id','=',$pesantren->provinsi_id)->get();
+            $type_form = 'edit';
+            return view('pusat_lembaga.pesantren.edit',compact('pesantren','takhasus','provinsi','type_form','kota'));
+        }
     }
 
     /**
@@ -163,7 +174,67 @@ class PesantrenController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $pesantren = m_pesantren::where('id','=',$id)->first();
+        if(is_null($pesantren)){
+            Session::flash('error_msg', 'Data Pesantren Tidak Ditemukan!');
+            return redirect()->to('/home/pesantren');
+        }else{
+            $this->validate($request,[
+                'nama_pondok_pesantren' => 'required|string|max:255',
+                'nama_yayasan' => 'required|string|max:255',
+                'takhasus_id' => 'required|integer',
+                'tahun_berdiri' => 'required',
+                'jumlah_santri_lk' => 'required|integer',
+                'jumlah_santri_pr' => 'required|integer',
+                'nama_pengasuh' => 'required|string|max:100',
+                'nama_ketua_yayasan' => 'required|string|max:100',
+                'provinsi_id' => 'required|integer',
+                'kabupaten_id' => 'required|integer',
+                'alamat' => 'required',
+                'no_telp' => 'required|string|max:50',
+                'fax' => 'required|string|max:50',
+                'email' => 'required|email|max:100',
+                'website' => 'required|string|max:100',
+                'luas_tanah' => 'required',
+            ]);
+
+            $cek_provinsi = ref_provinsi::where('id','=',$request->provinsi_id)->first();
+            
+            if(!is_null($cek_provinsi)){
+                $cek_kab = ref_kabupaten::where('provinsi_id','=',$request->provinsi_id)
+                            ->where('id','=',$request->kabupaten_id)
+                            ->first();
+
+                if(is_null($cek_kab)){
+                    Session::flash('error_msg', 'Kabupaten/Kota Tidak Ditemukan!');
+                    return back()->withInput();
+                }else{
+                    $update = m_pesantren::find($id);
+                    $update->nama_pondok_pesantren = $request->nama_pondok_pesantren;
+                    $update->nama_yayasan = $request->nama_yayasan;
+                    $update->takhasus_id = $request->takhasus_id;
+                    $update->tahun_berdiri = $request->tahun_berdiri;
+                    $update->jumlah_santri_lk = $request->jumlah_santri_lk;
+                    $update->jumlah_santri_pr = $request->jumlah_santri_pr;
+                    $update->nama_pengasuh = $request->nama_pengasuh;
+                    $update->nama_ketua_yayasan = $request->nama_ketua_yayasan;
+                    $update->provinsi_id = $request->provinsi_id;
+                    $update->kabupaten_id = $request->kabupaten_id;
+                    $update->alamat = $request->alamat;
+                    $update->no_telp = $request->no_telp;
+                    $update->fax = $request->fax;
+                    $update->email = $request->email;
+                    $update->website = $request->website;
+                    $update->luas_tanah = $request->luas_tanah;
+                    $update->save();
+                    Session::flash('success_msg', 'Berhasil Diubah!');
+                    return redirect()->to('/home/pesantren');
+                }
+            }else{
+                Session::flash('error_msg', 'Provinsi Tidak Ditemukan!');
+                return back()->withInput();
+            }
+        }
     }
 
     /**

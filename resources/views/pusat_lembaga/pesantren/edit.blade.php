@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('main-content')
-@section('title', 'Tambah Pesantren')
+@section('title', 'Ubah Data Pesantren')
 @section('styles')
 <link href="{{asset('assets/css/plugins/datapicker/datepicker3.css')}}" rel="stylesheet">
 <style type="text/css">
@@ -13,7 +13,7 @@
 
 <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>Tambah Pesantren</h2>
+                    <h2>Ubah Data Pesantren</h2>
                     <ol class="breadcrumb">
                         <li>
                             <a href="{{ url('/') }}">Home</a>
@@ -27,7 +27,7 @@
                             </a>
                         </li>
                         <li class="active">
-                            <strong>Tambah Pesantren</strong>
+                            <strong>Ubah Data Pesantren</strong>
                         </li>
                     </ol>
                 </div>
@@ -40,7 +40,7 @@
                 <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Tambah Pesantren</h5>
+                        <h5>Ubah Data Pesantren</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -51,8 +51,9 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                      <form role="form" action="{{ route('pesantren.store') }}" method="POST">
+                      <form role="form" action="{{ route('pesantren.update',$pesantren->id) }}" method="POST">
                       @csrf
+                      @method('PUT')
                       @include('pusat_lembaga.pesantren.form')
                     <button type="submit" class="btn btn-lg btn-w-m btn-primary"><i class="fa fa-check-square"></i>&nbsp;Submit</button>
                   </form>
