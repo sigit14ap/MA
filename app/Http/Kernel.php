@@ -63,5 +63,6 @@ class Kernel extends HttpKernel
         'IsPDMA' => \App\Http\Middleware\PDMAMiddleware::class,
         'IsLembaga' => \App\Http\Middleware\LembagaMiddleware::class,
         'IsPusatLembaga' => \App\Http\Middleware\PusatLembagaMiddleware::class,
+        'IsLogin' => \App\Http\Middleware\LoginMiddleware::class,
     ];
 }

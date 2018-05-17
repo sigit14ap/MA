@@ -49,11 +49,7 @@
                                 <span class="block m-t-xs"> <strong class="font-bold">{{ucwords(auth()->user()->name)}}</strong>
                                 </span>
                                 <span class="text-muted text-xs block">
-                                    @if(Auth::user()->level == "satker")
-                                        Enumerator
-                                    @else
-                                        {{ucwords(auth()->user()->level)}}
-                                    @endif
+                                    {{ucwords(auth()->user()->role)}}
                                 </span>
                             </span>
                     </div>
@@ -61,7 +57,7 @@
                         Ma'had Aly
                     </div>
                 </li>
-                @if(Auth::user()->role == "pusat")
+                @if((Auth::user()->role == "pusat") || (Auth::user()->role == "lembaga"))
                 <li>
                     <a href="{{ route('pesantren.index') }}"><i class="fa fa-briefcase"></i> <span class="nav-label">Pesantren</span></a>
                 </li>

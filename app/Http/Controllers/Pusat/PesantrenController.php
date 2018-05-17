@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
 use App\m_pesantren;
 use App\ref_takhasus;
+use App\ref_provinsi;
+use Session;
+use Validator;
+use App\ref_kabupaten;
 
 class PesantrenController extends Controller
 {
@@ -58,8 +62,10 @@ class PesantrenController extends Controller
     public function create()
     {
         $takhasus = ref_takhasus::all();
-        return view('pusat_lembaga.pesantren.create',compact('takhasus'));
+        $provinsi = ref_provinsi::all();
+        return view('pusat_lembaga.pesantren.create',compact('takhasus','provinsi'));
     }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -69,7 +75,61 @@ class PesantrenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'nama_pondok_pesantren' => 'required|string|max:255',
+            'nama_yayasan' => 'required|string|max:255',
+            'takhasus_id' => 'required|integer',
+            'tahun_berdiri' => 'required',
+            'jumlah_santri_lk' => 'required|integer',
+            'jumlah_santri_pr' => 'required|integer',
+            'nama_pengasuh' => 'required|string|max:100',
+            'nama_ketua_yayasan' => 'required|string|max:100',
+            'provinsi_id' => 'required|integer',
+            'kabupaten_id' => 'required|integer',
+            'alamat' => 'required',
+            'no_telp' => 'required|string|max:50',
+            'fax' => 'required|string|max:50',
+            'email' => 'required|email|max:100',
+            'website' => 'required|string|max:100',
+            'luas_tanah' => 'required',
+        ]);
+
+        $cek_provinsi = ref_provinsi::where('id','=',$request->provinsi_id)->first();
+        
+        if(!is_null($cek_provinsi)){
+            $cek_kab = ref_kabupaten::where('provinsi_id','=',$request->provinsi_id)
+                        ->where('id','=',$request->kabupaten_id)
+                        ->first();
+
+            if(is_null($cek_kab)){
+                Session::flash('error_msg', 'Kabupaten/Kota Tidak Ditemukan!');
+                return back()->withInput();
+            }else{
+                $store = new m_pesantren();
+                $store->nama_pondok_pesantren = $request->nama_pondok_pesantren;
+                $store->nama_yayasan = $request->nama_yayasan;
+                $store->takhasus_id = $request->takhasus_id;
+                $store->tahun_berdiri = $request->tahun_berdiri;
+                $store->jumlah_santri_lk = $request->jumlah_santri_lk;
+                $store->jumlah_santri_pr = $request->jumlah_santri_pr;
+                $store->nama_pengasuh = $request->nama_pengasuh;
+                $store->nama_ketua_yayasan = $request->nama_ketua_yayasan;
+                $store->provinsi_id = $request->provinsi_id;
+                $store->kabupaten_id = $request->kabupaten_id;
+                $store->alamat = $request->alamat;
+                $store->no_telp = $request->no_telp;
+                $store->fax = $request->fax;
+                $store->email = $request->email;
+                $store->website = $request->website;
+                $store->luas_tanah = $request->luas_tanah;
+                $store->save();
+                Session::flash('success_msg', 'Berhasil Ditambahkan!');
+                return redirect()->to('/home/pesantren');
+            }
+        }else{
+            Session::flash('error_msg', 'Provinsi Tidak Ditemukan!');
+            return back()->withInput();
+        }
     }
 
     /**
@@ -115,5 +175,26 @@ class PesantrenController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getcity(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'provinsi_id' => 'required|integer'
+        ]);
+
+        $cek = ref_kabupaten::where('provinsi_id', '=', $request->provinsi_id)->first();
+
+        if ($validator->passes()) {
+            if(is_null($cek)){
+                return response()->json(['error'=>'Kota/Kabupaten Tidak Ditemukan!'],404);
+            }else{
+                $city = ref_kabupaten::where('provinsi_id', '=', $request->provinsi_id)->get();
+                return response()->json($city);
+            }
+        }else{
+            return response()->json(['error'=>$validator->errors()->all()],400);
+        }
     }
 }
