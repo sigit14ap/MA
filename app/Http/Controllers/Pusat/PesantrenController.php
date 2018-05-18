@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pusat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Yajra\Datatables\Datatables;
+use Illuminate\Support\Facades\DB;
 use App\m_pesantren;
 use App\ref_takhasus;
 use App\ref_provinsi;
@@ -35,7 +36,7 @@ class PesantrenController extends Controller
                     
                                                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1" style="margin-left: -88px;">
                                             
-                                                    <li role="presentation"><a role="menuitem" href="'.route('pesantren.edit',['id'=>$data->id ]).'"><i class="fa fa-search-plus fa-lg"></i>&nbsp;&nbsp;Detail</a></li>
+                                                    <li role="presentation"><a role="menuitem" href="'.route('pesantren.show',['id'=>$data->id ]).'"><i class="fa fa-search-plus fa-lg"></i>&nbsp;&nbsp;Detail</a></li>
 
                                                     <li role="presentation" class="divider" style="height: 2px;"></li>
 
@@ -106,26 +107,34 @@ class PesantrenController extends Controller
                 Session::flash('error_msg', 'Kabupaten/Kota Tidak Ditemukan!');
                 return back()->withInput();
             }else{
-                $store = new m_pesantren();
-                $store->nama_pondok_pesantren = $request->nama_pondok_pesantren;
-                $store->nama_yayasan = $request->nama_yayasan;
-                $store->takhasus_id = $request->takhasus_id;
-                $store->tahun_berdiri = $request->tahun_berdiri;
-                $store->jumlah_santri_lk = $request->jumlah_santri_lk;
-                $store->jumlah_santri_pr = $request->jumlah_santri_pr;
-                $store->nama_pengasuh = $request->nama_pengasuh;
-                $store->nama_ketua_yayasan = $request->nama_ketua_yayasan;
-                $store->provinsi_id = $request->provinsi_id;
-                $store->kabupaten_id = $request->kabupaten_id;
-                $store->alamat = $request->alamat;
-                $store->no_telp = $request->no_telp;
-                $store->fax = $request->fax;
-                $store->email = $request->email;
-                $store->website = $request->website;
-                $store->luas_tanah = $request->luas_tanah;
-                $store->save();
-                Session::flash('success_msg', 'Berhasil Ditambahkan!');
-                return redirect()->to('/home/pesantren');
+                $cek_takhasus = ref_takhasus::where('id','=',$request->takhasus_id)
+                                ->first();
+
+                if(is_null($cek_takhasus)){
+                    Session::flash('error_msg', 'Takhasus Tidak Ditemukan!');
+                    return back()->withInput();
+                }else{
+                    $store = new m_pesantren();
+                    $store->nama_pondok_pesantren = $request->nama_pondok_pesantren;
+                    $store->nama_yayasan = $request->nama_yayasan;
+                    $store->takhasus_id = $request->takhasus_id;
+                    $store->tahun_berdiri = $request->tahun_berdiri;
+                    $store->jumlah_santri_lk = $request->jumlah_santri_lk;
+                    $store->jumlah_santri_pr = $request->jumlah_santri_pr;
+                    $store->nama_pengasuh = $request->nama_pengasuh;
+                    $store->nama_ketua_yayasan = $request->nama_ketua_yayasan;
+                    $store->provinsi_id = $request->provinsi_id;
+                    $store->kabupaten_id = $request->kabupaten_id;
+                    $store->alamat = $request->alamat;
+                    $store->no_telp = $request->no_telp;
+                    $store->fax = $request->fax;
+                    $store->email = $request->email;
+                    $store->website = $request->website;
+                    $store->luas_tanah = $request->luas_tanah;
+                    $store->save();
+                    Session::flash('success_msg', 'Berhasil Ditambahkan!');
+                    return redirect()->to('/home/pesantren');
+                }
             }
         }else{
             Session::flash('error_msg', 'Provinsi Tidak Ditemukan!');
@@ -141,7 +150,20 @@ class PesantrenController extends Controller
      */
     public function show($id)
     {
-        //
+        $pesantren = m_pesantren::where('id','=',$id)->first();
+        if(is_null($pesantren)){
+            Session::flash('error_msg', 'Data Pesantren Tidak Ditemukan!');
+            return redirect()->to('/home/pesantren');
+        }else{
+            $show = DB::table('m_pesantren')
+                        ->join('ref_takhasus','m_pesantren.takhasus_id','ref_takhasus.id')
+                        ->join('ref_provinsi','m_pesantren.provinsi_id','ref_provinsi.id')
+                        ->join('ref_kabupaten','m_pesantren.kabupaten_id','ref_kabupaten.id')
+                        ->select('m_pesantren.*','ref_takhasus.nama_takhasus','ref_provinsi.nama_provinsi','ref_kabupaten.nama_kabupaten')
+                        ->where('m_pesantren.id','=',$id)
+                        ->first();
+            return view('pusat_lembaga.pesantren.show',compact('show'));
+        }
     }
 
     /**

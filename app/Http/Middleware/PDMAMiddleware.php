@@ -19,7 +19,7 @@ class PDMAMiddleware
         if (!Auth::check()) {
             return redirect('/login');
         }elseif (Auth::user()->role == 'pusat') {
-            return redirect('/home/pusat');
+            return redirect('/home');
         }elseif (Auth::user()->role == 'lembaga') {
             return redirect('/home/lembaga');
         }

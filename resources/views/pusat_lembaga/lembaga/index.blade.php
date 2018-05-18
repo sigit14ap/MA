@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('main-content')
-@section('title', 'Pesantren')
+@section('title', 'Lembaga')
 <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>Pesantren</h2>
+                    <h2>Lembaga</h2>
                     <ol class="breadcrumb">
                         <li>
                             <a href="{{ url('/') }}">Home</a>
@@ -12,7 +12,7 @@
                             {{ucwords(Auth::user()->name)}}
                         </li>
                         <li class="active">
-                            <strong>Pesantren</strong>
+                            <strong>Lembaga</strong>
                         </li>
                     </ol>
                 </div>
@@ -50,7 +50,7 @@
                 <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Pesantren</h5>
+                        <h5>Lembaga</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -62,15 +62,15 @@
                     </div>
                     <div class="ibox-content">
                     @if(Auth::user()->role == "lembaga")
-                        <a href="{{ route('pesantren.create') }}"><button type="button" class="btn btn-lg btn-w-m btn-primary"><i class="fa fa-plus-square"></i>&nbsp;Tambah</button></a><hr>
+                        <a href="{{ route('lembaga.create') }}"><button type="button" class="btn btn-lg btn-w-m btn-primary"><i class="fa fa-plus-square"></i>&nbsp;Tambah</button></a><hr>
                     @endif
                     <div class="table-responsive">
                     <table class="table table-striped table-bordered table-hover dataTables-example" style="width : 100% !important;">
                     <thead>
                     <tr>
                         <th style="width: 27px !important;"><center>No.</i></center></th>
-                        <th><center>Pondok Pesantren</center></th>
-                        <th><center>Yayasan</center></th>
+                        <th><center>Lembaga</center></th>
+                        <th><center>Takhasus</center></th>
                         <th style="width: 27px !important;"><center><i class="glyphicon glyphicon-cog"></i></center></th>
                     </tr>
                     </thead>
@@ -79,8 +79,8 @@
                     <tfoot>
                     <tr>
                         <th style="width: 27px !important;"><center>No.</i></center></th>
-                        <th><center>Pondok Pesantren</center></th>
-                        <th><center>Yayasan</center></th>
+                        <th><center>Lembaga</center></th>
+                        <th><center>Takhasus</center></th>
                         <th style="width: 27px !important;"><center><i class="glyphicon glyphicon-cog"></i></center></th>
                     </tr>
                     </tfoot>
@@ -98,11 +98,11 @@
             $('.dataTables-example').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('pesantren.data_index') }}',
+                ajax: '{{ route('lembaga.data_index') }}',
                 columns: [
                             { "data": "DT_Row_Index" },
-                            { "data": "nama_pondok_pesantren" },
-                            { "data": "nama_yayasan" },
+                            { "data": "nama_lembaga" },
+                            { "data": "nama_takhasus" },
                             { "data": "options" }
                         ],
                 pageLength: 25,

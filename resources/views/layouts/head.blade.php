@@ -34,7 +34,7 @@
     </style>
 </head>
 
-<body class="pace-done fixed-sidebar">
+<body class="pace-done fixed-sidebar skin-3">
 
     <div id="wrapper">
 
@@ -63,6 +63,9 @@
                 </li>
                 @endif
                 <li>
+                    <a href="{{ route('lembaga.index') }}"><i class="fa fa-briefcase"></i> <span class="nav-label">Lembaga</span></a>
+                </li>
+                <li>
                     <a href="{{ route('logout') }}"><i class="fa fa-sign-out"></i> <span class="nav-label">Logout</span></a>
                 </li>
             </ul>
@@ -70,10 +73,10 @@
         </div>
     </nav>
 
-        <div id="page-wrapper" class="gray-bg">
-        <div class="row border-bottom">
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row border-bottom" style="margin-bottom: 20px;">
         <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
+        <div class="navbar-header" style="margin-top: -13px;">
             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#" style="margin-top: 28px;"><i class="fa fa-bars"></i> </a>
         </div>
             <ul class="nav navbar-top-links navbar-right" style="float: right;">

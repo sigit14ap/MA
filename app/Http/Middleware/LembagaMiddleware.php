@@ -21,7 +21,7 @@ class LembagaMiddleware
         }elseif (Auth::user()->role == 'pdma') {
             return redirect('/home/pdma');
         }elseif (Auth::user()->role == 'pusat') {
-            return redirect('/home/pusat');
+            return redirect('/home/pesantren');
         }
         return $next($request);
     }
