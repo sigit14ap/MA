@@ -9,7 +9,7 @@
                             <a href="{{ url('/') }}">Home</a>
                         </li>
                         <li>
-                            {{ucwords(Auth::user()->name)}}
+                            {{ucwords(Auth::user()->role)}}
                         </li>
                         <li class="active">
                             Pesantren

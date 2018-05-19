@@ -1,18 +1,18 @@
 @extends('layouts.app')
 @section('main-content')
-@section('title', 'Pesantren')
+@section('title', 'Mahasiswa')
 <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>Pesantren</h2>
+                    <h2>Mahasiswa</h2>
                     <ol class="breadcrumb">
                         <li>
                             <a href="{{ url('/') }}">Home</a>
                         </li>
                         <li>
-                            {{ucwords(Auth::user()->role)}}
+                            Lembaga
                         </li>
                         <li class="active">
-                            <strong>Pesantren</strong>
+                            <strong>Mahasiswa</strong>
                         </li>
                     </ol>
                 </div>
@@ -50,7 +50,7 @@
                 <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Pesantren</h5>
+                        <h5>Mahasiswa</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -61,16 +61,15 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                    @if(Auth::user()->role == "lembaga")
-                        <a href="{{ route('pesantren.create') }}"><button type="button" class="btn btn-lg btn-w-m btn-primary"><i class="fa fa-plus-square"></i>&nbsp;Tambah</button></a><hr>
-                    @endif
+                    <a href="{{ route('mahasiswa.create') }}"><button type="button" class="btn btn-lg btn-w-m btn-primary"><i class="fa fa-plus-square"></i>&nbsp;Tambah</button></a><hr>
+                    
                     <div class="table-responsive">
                     <table class="table table-striped table-bordered table-hover dataTables-example" style="width : 100% !important;">
                     <thead>
                     <tr>
                         <th style="width: 27px !important;"><center>No.</i></center></th>
-                        <th><center>Pondok Pesantren</center></th>
-                        <th><center>Yayasan</center></th>
+                        <th><center>Mahasiswa</center></th>
+                        <th><center>Lembaga</center></th>
                         <th style="width: 27px !important;"><center><i class="glyphicon glyphicon-cog"></i></center></th>
                     </tr>
                     </thead>
@@ -79,8 +78,8 @@
                     <tfoot>
                     <tr>
                         <th style="width: 27px !important;"><center>No.</i></center></th>
-                        <th><center>Pondok Pesantren</center></th>
-                        <th><center>Yayasan</center></th>
+                        <th><center>Mahasiswa</center></th>
+                        <th><center>Lembaga</center></th>
                         <th style="width: 27px !important;"><center><i class="glyphicon glyphicon-cog"></i></center></th>
                     </tr>
                     </tfoot>
@@ -93,16 +92,42 @@
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="myModalDelete" role="dialog">
+                <div class="modal-dialog">
+                                            
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Hapus</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Anda yakin ingin menghapus ?</p>
+                            <form id="delete-form" method="POST" action="">
+                                    {{ csrf_field() }}
+                                    {{ method_field("DELETE") }}
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-danger" id="delete">Hapus</button></a>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                 </div>
+                                              
+                </div>
+            </div>
+        <!-- END Modal -->
 <script>
         $(document).ready(function(){
             $('.dataTables-example').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('pesantren.data_index') }}',
+                ajax: '{{ route('mahasiswa.data_index') }}',
                 columns: [
                             { "data": "DT_Row_Index" },
-                            { "data": "nama_pondok_pesantren" },
-                            { "data": "nama_yayasan" },
+                            { "data": "nama_lengkap" },
+                            { "data": "nama_lembaga" },
                             { "data": "options" }
                         ],
                 pageLength: 25,
@@ -127,7 +152,16 @@
                 ]
 
             });
+            
+            $(document).on('click','.btn-destroy',function(){
+                var route = $(this).data('route');
+                $('#delete-form').attr('action', '');
+                $('#delete-form').attr('action', route);
+            });
 
+            $(document).on('click','#delete',function(){
+                $('#delete-form').submit();
+            });
         });
 
     </script>

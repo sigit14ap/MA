@@ -46,10 +46,10 @@
                             <img alt="image" class="img-circle" src="{{asset('assets/img/bnn.png')}}" style="width: 50px;height: 50px;" />
                              </span>
                             <span class="clear"> 
-                                <span class="block m-t-xs"> <strong class="font-bold">{{ucwords(auth()->user()->name)}}</strong>
+                                <span class="block m-t-xs" style="color :#fff;"> <strong class="font-bold">{{ucwords(auth()->user()->name)}}</strong>
                                 </span>
-                                <span class="text-muted text-xs block">
-                                    {{ucwords(auth()->user()->role)}}
+                                <span class="text-muted text-xs block" style="color :#fff;">
+                                    {{strtoupper(auth()->user()->role)}}
                                 </span>
                             </span>
                     </div>
@@ -65,6 +65,11 @@
                 <li>
                     <a href="{{ route('lembaga.index') }}"><i class="fa fa-briefcase"></i> <span class="nav-label">Lembaga</span></a>
                 </li>
+                @if(Auth::user()->role == "lembaga")
+                <li>
+                    <a href="{{ route('mahasiswa.index') }}"><i class="fa fa-users"></i> <span class="nav-label">Mahasiswa</span></a>
+                </li>
+                @endif
                 <li>
                     <a href="{{ route('logout') }}"><i class="fa fa-sign-out"></i> <span class="nav-label">Logout</span></a>
                 </li>

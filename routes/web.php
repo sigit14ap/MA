@@ -21,9 +21,13 @@ Route::get('/home', function () {
 
 Auth::routes();
 
-Route::group(['middleware' => 'IsLogin'], function () {
+Route::group(['prefix' => 'home','middleware' => 'IsLogin'], function () {
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
     Route::post('/getcity','Pusat\PesantrenController@getcity')->name('getcity');
+
+    //LEMBAGA
+    Route::get('lembaga', 'Lembaga\LembagaController@index')->name('lembaga.index');
+    Route::get('/data-lembaga', 'Lembaga\LembagaController@data_index')->name('lembaga.data_index');
 });
 
 Route::group(['prefix' => 'home', 'middleware' => 'IsPusatLembaga'], function () {
@@ -36,11 +40,9 @@ Route::group(['prefix' => 'home', 'middleware' => 'IsPusatLembaga'], function ()
     Route::get('/data-pesantren', 'Pusat\PesantrenController@data_index')->name('pesantren.data_index');
 
     //LEMBAGA
-    Route::get('lembaga', 'Lembaga\LembagaController@index')->name('lembaga.index');
     Route::get('lembaga/{id}/edit', 'Lembaga\LembagaController@edit')->name('lembaga.edit');
     Route::put('lembaga/{id}/update', 'Lembaga\LembagaController@update')->name('lembaga.update');
     Route::get('lembaga/{id}', 'Lembaga\LembagaController@show')->name('lembaga.show');
-    Route::get('/data-lembaga', 'Lembaga\LembagaController@data_index')->name('lembaga.data_index');
 });
 
 Route::group(['prefix' => 'home', 'middleware' => 'IsLembaga'], function () {
@@ -52,4 +54,8 @@ Route::group(['prefix' => 'home', 'middleware' => 'IsLembaga'], function () {
     //LEMABAGA
     Route::get('create/lembaga', 'Lembaga\LembagaController@create')->name('lembaga.create');
     Route::post('store/lembaga', 'Lembaga\LembagaController@store')->name('lembaga.store');
+
+    //MAHASISWA
+    Route::resource('mahasiswa', 'Lembaga\MahasiswaController');
+    Route::get('data-mahasiswa', 'Lembaga\MahasiswaController@data_index')->name('mahasiswa.data_index');
 });

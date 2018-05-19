@@ -19,7 +19,7 @@ class PusatLembagaMiddleware
         if (!Auth::check()) {
             return redirect('/login');
         }elseif (Auth::user()->role == 'pdma') {
-            return redirect('/home/pdma');
+            return redirect('/home/lembaga');
         }
         return $next($request);
     }

@@ -19,7 +19,7 @@ class LembagaMiddleware
         if (!Auth::check()) {
             return redirect('/login');
         }elseif (Auth::user()->role == 'pdma') {
-            return redirect('/home/pdma');
+            return redirect('/home/lembaga');
         }elseif (Auth::user()->role == 'pusat') {
             return redirect('/home/pesantren');
         }

@@ -19,7 +19,7 @@ class PusatMiddleware
         if (!Auth::check()) {
             return redirect('/login');
         }elseif (Auth::user()->role == 'pdma') {
-            return redirect('/home/pdma');
+            return redirect('/home/lembaga');
         }elseif (Auth::user()->role == 'lembaga') {
             return redirect('/home/lembaga');
         }

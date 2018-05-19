@@ -19,7 +19,7 @@
                             <a href="{{ url('/') }}">Home</a>
                         </li>
                         <li>
-                            {{ucwords(Auth::user()->name)}}
+                            {{ucwords(Auth::user()->role)}}
                         </li>
                         <li>
                             <a href="{{ route('pesantren.index') }}">
@@ -36,6 +36,30 @@
                 </div>
             </div>
             <div class="wrapper wrapper-content animated fadeInRight">
+                 @if(Session::has('error_msg'))
+                <div class="alert alert-danger alert-dismissable">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>{{ Session::get('error_msg') }}</strong>
+                </div>
+                @endif
+
+                @if(Session::has('success_msg'))
+                <div class="alert alert-success alert-dismissable">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>{{ Session::get('success_msg') }}</strong>
+                </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissabl">
+                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             <div class="row">
                 <div class="col-lg-12">
                 <div class="ibox float-e-margins">
@@ -55,7 +79,7 @@
                       @csrf
                       @method('PUT')
                       @include('pusat_lembaga.pesantren.form')
-                    <button type="submit" class="btn btn-lg btn-w-m btn-primary"><i class="fa fa-check-square"></i>&nbsp;Submit</button>
+                    <button type="submit" class="btn btn-lg btn-w-m btn-primary" id="submit-btn" style="margin-top: 25px;"><i class="fa fa-check-square"></i>&nbsp;Submit</button>
                   </form>
                 </div>
             </div>

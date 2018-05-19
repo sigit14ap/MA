@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @section('main-content')
-@section('title', 'Ubah Data Lembaga')
+@section('title', 'Tambah Mahasiswa')
 @section('styles')
+<link href="{{asset('assets/css/plugins/datapicker/datepicker3.css')}}" rel="stylesheet">
 <style type="text/css">
     .bootstrap-select{
       width: 100% !important;
@@ -12,21 +13,21 @@
 
 <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>Ubah Data Lembaga</h2>
+                    <h2>Tambah Mahasiswa</h2>
                     <ol class="breadcrumb">
                         <li>
                             <a href="{{ url('/') }}">Home</a>
                         </li>
                         <li>
-                            {{ucwords(Auth::user()->role)}}
+                            Lembaga
                         </li>
                         <li>
-                            <a href="{{ route('lembaga.index') }}">
-                                Lembaga
+                            <a href="{{ route('mahasiswa.index') }}">
+                                Mahasiswa
                             </a>
                         </li>
                         <li class="active">
-                            <strong>Ubah Data Lembaga</strong>
+                            <strong>Tambah Mahasiswa</strong>
                         </li>
                     </ol>
                 </div>
@@ -63,7 +64,7 @@
                 <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Ubah Data Lembaga</h5>
+                        <h5>Tambah Mahasiswa</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -74,10 +75,9 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                      <form role="form" action="{{ route('lembaga.update',$lembaga->id) }}" method="POST">
+                      <form role="form" action="{{ route('mahasiswa.store') }}" method="POST">
                       @csrf
-                      @method('PUT')
-                      @include('pusat_lembaga.lembaga.form')
+                      @include('lembaga.mahasiswa.form')
                     <button type="submit" class="btn btn-lg btn-w-m btn-primary" id="submit-btn" style="margin-top: 25px;"><i class="fa fa-check-square"></i>&nbsp;Submit</button>
                   </form>
                 </div>
@@ -89,6 +89,11 @@
       <meta name="token-csrf" content="{{ csrf_token() }}"> 
 <script type="text/javascript">
         $(document).ready(function(){
+
+            $('.date').datepicker({
+                maxDate: 'now',
+                format: 'yyyy-mm-dd'
+            });
 
             $(document).on('change','#province',function(){
               $('#submit-btn').prop('disabled',true);
@@ -141,4 +146,7 @@
         });
 
 </script>
+@section('scripts-header')
+<script src="{{asset('assets/js/plugins/datapicker/bootstrap-datepicker.js')}}"></script>
+@endsection
 @endsection
